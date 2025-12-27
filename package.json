@@ -1,0 +1,14 @@
+{
+  "name": "torch",
+  "version": "1.0.0",
+  "description": "Tonmou's Open-source, Resourceful and Customized Helper (TORCH), Discord bot for private usage",
+  "main": "torch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tonmou8128",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.25.1"
+  }
+}
