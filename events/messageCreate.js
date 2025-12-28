@@ -12,7 +12,7 @@ module.exports = {
 
 async function commandHandler(client, message) {
     if (!message.guild) {
-        message.channel.send("Les commandes ne sont pas disponibles en message privé.");
+        message.channel.send(simpleEmbedBuilder({color: "red", description: "`⚠️` **Erreur:** Les commandes ne sont pas disponibles en message privé."}));
         return;
     }
 
@@ -21,6 +21,8 @@ async function commandHandler(client, message) {
     const name = args.shift().toLowerCase();
     const element = allCommands.get(name);
     if (!element) return;
+    if (element.delete) message.delete();
+    if (!permissionsHandler(element, message)) return;
     const betterArgs = await argumentsHandler(element, args, message);
     if (!betterArgs) return;
     element.execute(client, message, betterArgs);
@@ -88,6 +90,14 @@ async function argumentsHandler(element, args, message) {
     }
 
     return betterArgs;
+}
+
+function permissionsHandler(element, message) {
+    const permission = element.permission;
+    const member = message.member;
+    if (member.permissions.has(permission)) return true;
+    message.channel.send(simpleEmbedBuilder({color: "red", description: `\`❌\` Vous n'avez pas la permission d'utiliser la commande **${element.name}**.`}))
+    return false;
 }
 
 function usagePrinter(element) {
