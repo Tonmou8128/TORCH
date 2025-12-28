@@ -1,5 +1,6 @@
 const { Events } = require("discord.js");
 const { prefix } = require("../config.json");
+const { simpleEmbedBuilder } = require("../utils.js")
 
 module.exports = {
     trigger: Events.MessageCreate,
@@ -30,7 +31,7 @@ async function argumentsHandler(element, args, message) {
     const template = element.template;
 
     if (args.length > template.length && template[template.length - 1].type !== "string") {
-        message.channel.send(`Un élément innatendu a été rencontré: ${args[args.length - 1]}. Usage: ${usagePrinter(element)}`)
+        message.channel.send(simpleEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** Un élément innatendu a été rencontré: "*${args[args.length - 1]}*".\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
         return false;
     }
 
@@ -42,7 +43,7 @@ async function argumentsHandler(element, args, message) {
 
         if (!rawArg) {
             if (required) {
-                message.channel.send(`Un argument obligatoire (${name}) est manquant. Usage: ${usagePrinter(element)}`);
+                message.channel.send(simpleEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument obligatoire *${name}* est manquant.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
                 return false;
             }
             else break;
@@ -58,7 +59,7 @@ async function argumentsHandler(element, args, message) {
             case "int":
                 const intArg = parseFloat(rawArg);
                 if (!Number.isInteger(intArg)) {
-                    message.channel.send(`L'argument ${name} est incorrect. Un int est demandé. Usage: ${usagePrinter(element)}`);
+                    message.channel.send(simpleEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument *${name}* est incorrect. Un *int* est demandé.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
                     return false;
                 }
                 betterArgs.push(intArg);
@@ -66,7 +67,7 @@ async function argumentsHandler(element, args, message) {
             case "float":
                 const floatArg = parseFloat(rawArg);
                 if (Number.isNaN(floatArg)) {
-                    message.channel.send(`L'argument ${name} est incorrect. Un float est demandé. Usage: ${usagePrinter(element)}`);
+                    message.channel.send(simpleEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument *${name}* est incorrect. Un *float* est demandé.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
                     return false;
                 }
                 betterArgs.push(floatArg);
@@ -76,13 +77,13 @@ async function argumentsHandler(element, args, message) {
                 const id = rawArg.replace("<@", "").replace("!", "").replace(">", "");
                 member = await message.guild.members.fetch(id).catch(() => null);
                 if (!member) {
-                    message.channel.send(`L'argument ${name} est incorrect. Un utilisateur (mention ou id.) est demandé. Usage: ${usagePrinter(element)}`);
+                    message.channel.send(simpleEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument *${name}* est incorrect. Un *utilisateur* (mention ou id.) est demandé.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
                     return false;
                 }
                 betterArgs.push(member);
                 break;
             default:
-                message.channel.send(`Une erreur lors de la gestion des arguments de la commande est survenue. Type demandé: ${type} pour l'argument ${name} de la commande ${element.name}. Usage: ${usagePrinter(element)}`);
+                message.channel.send(simpleEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** Une erreur lors de la gestion des arguments de la commande est survenue. Type demandé: *${type}* pour l'argument *${name}* de la commande *${element.name}*.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
         }
     }
 
