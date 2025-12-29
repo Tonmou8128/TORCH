@@ -1,9 +1,9 @@
-const { embedBuilder, usagePrinter } = require("../../utils.js");
+const { betterEmbedBuilder, usagePrinter } = require("../../utils.js");
 
 module.exports = {
     name: "help",
     description: "Liste toutes les commandes disponibles, ou donne des précisions sur une en particulier",
-    category: "informations",
+    category: "Informations",
     template: [
         {type: "string", required: false, unique: true, name: "command"}
     ],
@@ -11,12 +11,12 @@ module.exports = {
         if (args.length > 0) {
             const command = client.commands.get(...args);
             if (!command) {
-                message.channel.send(embedBuilder({color: "red", description: `\`⚠️\` **Erreur:** La commande *${args[0]}* est inconnue.`}))
+                message.channel.send(betterEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** La commande *${args[0]}* est inconnue.`}))
                 return;
             }
             let aliasText = "";
             if (command.aliases) aliasText = `\n- **Alias:** ${command.aliases.join(", ")}`;
-            message.channel.send(embedBuilder({color: "blue", title: `\`📜\` Informations sur la commande ${command.name}`, description: `- **Description:** ${command.description}\n- **Usage:** \`${usagePrinter(command)}\`${aliasText}\n- **Permission:** ${command.permission ?? "Aucune"}`}))
+            message.channel.send(betterEmbedBuilder({color: "blue", title: `\`📜\` Informations sur la commande ${command.name}`, description: `- **Description:** ${command.description}\n- **Usage:** \`${usagePrinter(command)}\`${aliasText}\n- **Permission:** ${command.permission ?? "Aucune"}`}))
         }
         else {
             let categories = {} // must be like this: {informations: [{name: ping, command: module}, ...], test: [{...}]}
@@ -34,7 +34,7 @@ module.exports = {
                 });
                 fields.push({title: key, description: desc.slice(0, -2)});
             }
-            message.channel.send(embedBuilder({color: "blue", title: "`📜` Liste des commandes", fields: fields}));
+            message.channel.send(betterEmbedBuilder({color: "blue", title: "`📜` Liste des commandes", fields: fields}));
         }
     }
 }

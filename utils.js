@@ -7,7 +7,7 @@ const colorCodes = {
     blue: "#30BEF6"
 }
 
-function embedBuilder(options) {
+function betterEmbedBuilder(options) {
     let embed = new EmbedBuilder().setColor(colorCodes[options.color] ?? colorCodes["blue"]);
     if (options.title) embed.setTitle(options.title);
     if (options.titleURL) embed.setURL(options.titleURL);
@@ -28,7 +28,7 @@ function embedBuilder(options) {
         let finalSingleField = {};
         if (field.title) finalSingleField.name = field.title;
         if (field.description) finalSingleField.value = field.description;
-        if (field.inline) finalSingleFields.inline = field.inline;
+        if (field.inline) finalSingleField.inline = field.inline;
         finalFields.push(finalSingleField);
     });
     if (finalFields.length !== 0) embed.addFields(...finalFields);
@@ -45,4 +45,4 @@ function usagePrinter(element) {
     return usage;
 }
 
-module.exports = { embedBuilder, usagePrinter };
+module.exports = { betterEmbedBuilder, usagePrinter };
