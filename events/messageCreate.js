@@ -1,5 +1,5 @@
 const { Events } = require("discord.js");
-const { prefix } = require("../config.json");
+const { prefix, owner } = require("../config.json");
 const { betterEmbedBuilder, usagePrinter } = require("../utils.js");
 
 module.exports = {
@@ -97,6 +97,7 @@ async function argumentsHandler(element, args, message) {
 function permissionsHandler(element, message) {
     const permission = element.permission;
     const member = message.member;
+    if (permission === "owner" && member.id === owner) return true;
     if (member.permissions.has(permission)) return true;
     message.channel.send(betterEmbedBuilder({color: "red", description: `\`❌\` Vous n'avez pas la permission d'utiliser la commande **${element.name}**.`}))
     return false;
