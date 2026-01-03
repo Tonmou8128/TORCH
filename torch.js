@@ -6,7 +6,7 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBit
 client.commands = new Map();
 
 function registerAllCommands(client) {
-    const allCategoryFolders = fs.readdirSync("./commands").filter(folder => fs.statSync(`./commands/${folder}`).isDirectory()); 
+    const allCategoryFolders = fs.readdirSync("./commands").filter(folder => fs.statSync(`./commands/${folder}`).isDirectory());
     allCategoryFolders.forEach(categoryFolder => {
         const allCommandsOfCategory = fs.readdirSync(`./commands/${categoryFolder}`).filter(file => file.endsWith(".js"));
         allCommandsOfCategory.forEach(file => {
