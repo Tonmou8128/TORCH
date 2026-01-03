@@ -1,5 +1,11 @@
 {
     "prefix": "?",
 
-    "owner": "985977634414530590"
+    "owner": 985977634414530590,
+
+    "permissions": {
+        "administrateur": "Administrator",
+        "moderateur": "BanMembers",
+        "helper": "ManageMessages" 
+    }
 }

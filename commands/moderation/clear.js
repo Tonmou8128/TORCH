@@ -1,3 +1,4 @@
+const { PermissionsBitField, PermissionFlagsBits } = require("discord.js");
 const  { betterEmbedBuilder } = require("../../utils");
 
 module.exports = {
@@ -5,7 +6,7 @@ module.exports = {
     description: "Supprime les messages",
     category: "Modération",
     aliases: ["delete"],
-    permission: "BanMembers",
+    permission: "moderateur",
     template: [
         {type: "int", required: true, name: "montant"}
     ],

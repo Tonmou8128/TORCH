@@ -1,10 +1,11 @@
+const { PermissionFlagsBits } = require("discord.js");
 const { betterEmbedBuilder } = require("../../utils")
 
 module.exports = {
     name: "unban",
     description: "Débannit un membre",
     category: "Modération",
-    permission: "BanMembers",
+    permission: "moderateur",
     delete: true,
     template: [
         {type: "user", required: true, name: "utilisateur"}

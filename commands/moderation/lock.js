@@ -5,7 +5,7 @@ module.exports = {
     name: "lock",
     description: "Empêche les membres d'écrire dans le salon",
     category: "Modération",
-    permission: "BanMembers",
+    permission: "moderateur",
     execute(client, message) {
         message.channel.permissionOverwrites.set([
             {id: message.guild.id, deny: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.CreatePrivateThreads, PermissionFlagsBits.CreatePublicThreads]}

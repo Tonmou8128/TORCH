@@ -1,5 +1,5 @@
 const { Events } = require("discord.js");
-const { prefix, owner } = require("../config.json");
+const { prefix, owner, permissions } = require("../config.json");
 const { betterEmbedBuilder, usagePrinter } = require("../utils.js");
 
 module.exports = {
@@ -113,7 +113,9 @@ async function argumentsHandler(client, element, args, message) {
 }
 
 function permissionsHandler(element, message) {
-    const permission = element.permission;
+    const rawPermission = element.permission;
+    if (!rawPermission) return true;
+    const permission = permissions[rawPermission];
     const member = message.member;
     if (permission === "owner" && member.id === owner) return true;
     if (member.permissions.has(permission)) return true;
