@@ -10,8 +10,8 @@ module.exports = {
         {type: "int", required: true, name: "montant"}
     ],
     execute(client, message, args) {
-        if (args[0] <= 0) {
-            message.channel.send(betterEmbedBuilder({description: "`⚠️` Veuillez donner un nombre entier supérieur à 0", color: "red"}));
+        if (args[0] <= 0 && args[0] >= 100) {
+            message.channel.send(betterEmbedBuilder({description: "`⚠️` Veuillez donner un nombre entier compris entre 1 et 100.", color: "red"}));
             return;
         }
         message.channel.bulkDelete(args[0], true);

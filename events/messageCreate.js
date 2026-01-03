@@ -23,12 +23,12 @@ async function commandHandler(client, message) {
     if (!element) return;
     if (element.delete) message.delete();
     if (!permissionsHandler(element, message)) return;
-    const betterArgs = await argumentsHandler(element, args, message);
+    const betterArgs = await argumentsHandler(client, element, args, message);
     if (!betterArgs) return;
     element.execute(client, message, betterArgs);
 }
 
-async function argumentsHandler(element, args, message) {
+async function argumentsHandler(client, element, args, message) {
     let betterArgs = [];
     const template = element.template ?? [];
     const lastArgTemplate = template[template.length - 1] ?? {};
@@ -78,13 +78,31 @@ async function argumentsHandler(element, args, message) {
                 break;
             case "member":
                 let member;
-                const id = rawArg.replace("<@", "").replace("!", "").replace(">", "");
-                member = await message.guild.members.fetch(id).catch(() => null);
+                const memberId = rawArg.replace("<@", "").replace("!", "").replace(">", "");
+                member = await message.guild.members.fetch(memberId).catch(() => null);
                 if (!member) {
-                    message.channel.send(betterEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument *${name}* est incorrect. Un *utilisateur* (mention ou id.) est demandé.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
+                    message.channel.send(betterEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument *${name}* est incorrect. Un *membre* (mention ou id.) est demandé.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
                     return false;
                 }
                 betterArgs.push(member);
+                break;
+            case "user":
+                let user;
+                const userId = rawArg.replace("<@", "").replace("!", "").replace(">", "");
+                user = await client.users.fetch(userId);
+                if (!user) {
+                    message.channel.send(betterEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument *${name}* est incorrect. Un *utilisateur* (mention ou id.) est demandé.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
+                    return false;
+                }
+                betterArgs.push(user);
+                break;
+            case "boolean":
+                if (rawArg === true) betterArgs.push(true);
+                else if (rawArg === false) betterArgs.push(false);
+                else {
+                    message.channel.send(betterEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument *${name}* est incorrect. Un booléen est demandé.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}))
+                    return false
+                };
                 break;
             default:
                 message.channel.send(betterEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** Une erreur lors de la gestion des arguments de la commande est survenue. Type demandé: *${type}* pour l'argument *${name}* de la commande *${element.name}*.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));

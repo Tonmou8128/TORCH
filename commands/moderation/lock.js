@@ -10,6 +10,6 @@ module.exports = {
         message.channel.permissionOverwrites.set([
             {id: message.guild.id, deny: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.CreatePrivateThreads, PermissionFlagsBits.CreatePublicThreads]}
         ]);
-        message.channel.send(betterEmbedBuilder({color: "green", description: "`✅` Le salon a bien été bloqué"}));
+        message.channel.send(betterEmbedBuilder({color: "green", description: "`✅` Le salon a bien été bloqué."}));
     }
 }
