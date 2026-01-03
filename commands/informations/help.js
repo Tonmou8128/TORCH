@@ -32,7 +32,7 @@ module.exports = {
                 categories[key].forEach(command => {
                     desc += `- **${command.name}**: ${command.description}\n`
                 });
-                fields.push({title: key, description: desc.slice(0, -2)});
+                fields.push({title: key, description: desc.slice(0, -1)});
             }
             message.channel.send(betterEmbedBuilder({color: "blue", title: "`📜` Liste des commandes", fields: fields}));
         }
