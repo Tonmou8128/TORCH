@@ -4,7 +4,7 @@ module.exports = {
     name: "unban",
     description: "Débannit un membre",
     category: "Modération",
-    permissions: "BanMembers",
+    permission: "BanMembers",
     delete: true,
     template: [
         {type: "user", required: true, name: "utilisateur"}

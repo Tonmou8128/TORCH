@@ -4,7 +4,7 @@ module.exports = {
     name: "ban",
     description: "Bannit un membre",
     category: "Modération",
-    permissions: "BanMembers",
+    permission: "BanMembers",
     delete: true,
     template: [
         {type: "member", required: true, name: "crimier"},

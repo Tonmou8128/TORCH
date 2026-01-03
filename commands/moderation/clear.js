@@ -5,7 +5,7 @@ module.exports = {
     description: "Supprime les messages",
     category: "Modération",
     aliases: ["delete"],
-    permissions: "BanMembers",
+    permission: "BanMembers",
     template: [
         {type: "int", required: true, name: "montant"}
     ],
