@@ -7,5 +7,7 @@
         "administrateur": "Administrator",
         "moderateur": "BanMembers",
         "helper": "ManageMessages" 
-    }
+    },
+
+    "mutedRoleName": "Muted"
 }
