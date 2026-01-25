@@ -9,6 +9,7 @@
   "author": "Tonmou8128",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.25.1"
+    "discord.js": "^14.25.1",
+    "mysql2": "^3.16.1"
   }
 }

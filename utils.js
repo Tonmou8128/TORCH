@@ -45,4 +45,16 @@ function usagePrinter(element) {
     return usage;
 }
 
-module.exports = { betterEmbedBuilder, usagePrinter };
+async function loadAutoresponds(client) {
+    client.autoresponds = [];
+    const query = await client.db.query("SELECT * FROM autorespond");
+    query[0].forEach(line => {
+        let completeAutorespond = {};
+        for (const [key, value] of Object.entries(line)) {
+            completeAutorespond[key] = value;
+        }
+        client.autoresponds.push(completeAutorespond);
+    });
+}
+
+module.exports = { betterEmbedBuilder, usagePrinter, loadAutoresponds };

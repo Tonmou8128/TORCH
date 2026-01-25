@@ -1,6 +1,8 @@
 const { Client, GatewayIntentBits, Events } = require("discord.js");
-const { token } = require("./secret.json");
+const { token, db } = require("./secret.json");
 const fs = require("fs");
+const mysql = require("mysql2/promise");
+const { loadAutoresponds } = require("./utils.js")
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 client.commands = new Map();
@@ -34,10 +36,21 @@ function registerSingleEvent(client, element) {
     else client.on(element.trigger, (...args) => element.execute(client, ...args))
 }
 
+function connectToDatabase(client) {
+    client.db = mysql.createPool({
+        host: db.host,
+        user: db.user,
+        password: db.password,
+        database: db.database
+    });
+}
+
 client.once(Events.ClientReady, (readyClient) => {
+    connectToDatabase(readyClient);
     registerAllCommands(readyClient);
     registerAllEvents(readyClient);
-    console.log("Ready !")
+    loadAutoresponds(readyClient);
+    console.log("TORCH est prêt !");
 });
 
 client.login(token);

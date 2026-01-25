@@ -1,12 +1,14 @@
 const { Events } = require("discord.js");
 const { prefix, owner, permissions } = require("../config.json");
+const { protectedServers } = require("../secret.json");
 const { betterEmbedBuilder, usagePrinter } = require("../utils.js");
+const { raw } = require("mysql2");
 
 module.exports = {
     trigger: Events.MessageCreate,
     async execute(client, message) {
         if (message.content.startsWith(prefix)) await commandHandler(client, message);
-        else; // for other usages
+        else autorespondHandler(client, message); // for other usages
     }
 }
 
@@ -21,6 +23,7 @@ async function commandHandler(client, message) {
     const name = args.shift().toLowerCase();
     const element = allCommands.get(name);
     if (!element) return;
+    if (!protectedServersHandler(element, message)) return;
     if (element.delete) message.delete();
     if (!permissionsHandler(element, message)) return;
     const betterArgs = await argumentsHandler(client, element, args, message);
@@ -43,6 +46,7 @@ async function argumentsHandler(client, element, args, message) {
         const type = template[i].type;
         const required = template[i].required;
         const name = template[i].name;
+        const options = template[i].options;
         const rawArg = args[i];
 
         if (!rawArg) {
@@ -106,6 +110,11 @@ async function argumentsHandler(client, element, args, message) {
                 break;
             default:
                 message.channel.send(betterEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** Une erreur lors de la gestion des arguments de la commande est survenue. Type demandé: *${type}* pour l'argument *${name}* de la commande *${element.name}*.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
+                return false;
+        }
+        if (options && !options.includes(rawArg)) {
+            message.channel.send(betterEmbedBuilder({color: "red", description: `\`⚠️\` **Erreur:** L'argument *${rawArg}* doit être parmi \`${options}\`.\n\`📌\` **Usage:** \`${usagePrinter(element)}\``}));
+            return false
         }
     }
 
@@ -121,4 +130,20 @@ function permissionsHandler(element, message) {
     if (member.permissions.has(permission)) return true;
     message.channel.send(betterEmbedBuilder({color: "red", description: `\`❌\` Vous n'avez pas la permission d'utiliser la commande **${element.name}**.`}))
     return false;
+}
+
+function protectedServersHandler(element, message) {
+    if (element.protected && !protectedServers.includes(message.guild.id.toString())) {
+        message.channel.send(betterEmbedBuilder({color: "red", description: "`❌` Cette commande n'est pas disponible dans ce serveur."}));
+        return false
+    }
+    return true
+}
+
+function autorespondHandler(client, message) {
+    client.autoresponds.forEach(autorespond => {
+        if (message.content.split(" ").includes(autorespond.entry) && message.guild.id.toString() === autorespond.server) {
+            message.channel.send(autorespond.response);
+        }
+    })
 }
